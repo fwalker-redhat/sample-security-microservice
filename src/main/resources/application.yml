@@ -1,0 +1,14 @@
+quarkus:
+  rest-client:
+    "com.example.remote.SampleRemoteService":
+      url: http://localhost:8080
+  oidc-client:
+    enabled: false
+  log:
+    console:
+      json: false
+  keycloak:
+    policy-enforcer:
+      enable: false
+  oidc:
+    enabled: false

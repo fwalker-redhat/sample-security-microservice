@@ -1,0 +1,31 @@
+quarkus:
+  oidc:
+    application-type: service
+    client-id: sample-first
+    credentials:
+      secret: JGd27inqpI0GrDukc1vyNu6GVKqh3KlX
+    auth-server-url: http://localhost:8180/realms/quarkus
+  http:
+    auth:
+      permission:
+        authenticated:
+          paths: /api/v1/sample*
+          policy: authenticated
+  rest-client:
+    "com.example.remote.SampleRemoteService":
+      url: http://localhost:8080
+  oidc-client:
+    credentials:
+      secret: JGd27inqpI0GrDukc1vyNu6GVKqh3KlX
+    client-id: sample-first
+    grant:
+      type: client
+    enabled: true
+    early-tokens-acquisition: false
+    auth-server-url: http://localhost:8180/realms/quarkus
+  log:
+    console:
+      json: false
+  keycloak:
+    policy-enforcer:
+      enable: false
