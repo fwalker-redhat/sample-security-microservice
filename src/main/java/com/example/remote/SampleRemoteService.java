@@ -2,6 +2,7 @@ package com.example.remote;
 
 import com.example.model.Sample;
 import io.quarkus.oidc.client.filter.OidcClientFilter;
+import org.eclipse.microprofile.rest.client.annotation.RegisterClientHeaders;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 import javax.ws.rs.*;
@@ -26,6 +27,7 @@ import static java.lang.String.format;
  * }
  */
 @RegisterRestClient
+@RegisterClientHeaders
 @OidcClientFilter
 @Path("/api/v1/sample")
 public interface SampleRemoteService {
