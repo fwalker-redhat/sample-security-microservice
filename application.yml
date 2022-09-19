@@ -51,6 +51,8 @@
             paths: /api/v1/sample*
             policy: authenticated
             enabled: true
+    tls:
+      trust-all: true
     oidc:
       application-type: service
       client-id: client-id
@@ -75,9 +77,9 @@ quarkus:
     console:
       json: false
   oidc:
-    enabled: true
+    enabled: false
   oidc-client:
-    enabled: true
+    enabled: false
   keycloak:
     policy-enforcer:
       enable: false
@@ -85,15 +87,6 @@ quarkus:
     users:
       embedded:
         enabled: false
-  http:
-    auth:
-      permission:
-        authenticated:
-          paths: /api/v1/sample*
-          policy: authenticated
-          enabled: false
-  tls:
-    trust-all: true
 org:
   eclipse:
     microprofile:
