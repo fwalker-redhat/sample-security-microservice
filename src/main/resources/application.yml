@@ -1,0 +1,93 @@
+"%nosecurity":
+  quarkus:
+    oidc-client:
+      enabled: false
+    keycloak:
+      policy-enforcer:
+        enable: false
+    oidc:
+      enabled: false
+    security:
+      users:
+        embedded:
+          enabled: false
+
+"%basicsecurity":
+  quarkus:
+    security:
+      users:
+        embedded:
+          enabled: true
+          plain-text: true
+          users:
+            admin: admin
+          roles:
+            admin: admin
+    http:
+      auth:
+        permission:
+          authenticated:
+            paths: /api/v1/sample*
+            policy: authenticated
+    oidc-client:
+      enabled: false
+    keycloak:
+      policy-enforcer:
+        enable: false
+    oidc:
+      enabled: false
+
+"%oidcsecurity":
+  quarkus:
+    security:
+      users:
+        embedded:
+          enabled: false
+    http:
+      auth:
+        permission:
+          authenticated:
+            paths: /api/v1/sample*
+            policy: authenticated
+    oidc:
+      application-type: service
+      client-id: client-id
+      credentials:
+        secret: client-secret
+      auth-server-url: http://oidcserver/realms/name
+    oidc-client:
+      credentials:
+        secret: client-secret
+      client-id: client-id
+      grant:
+        type: client
+      enabled: true
+      early-tokens-acquisition: false
+      auth-server-url: http://oidcserver/realms/name
+
+quarkus:
+  rest-client:
+    "com.example.remote.SampleRemoteService":
+      url: http://localhost:8080
+  log:
+    console:
+      json: false
+  oidc:
+    enabled: true
+  oidc-client:
+    enabled: true
+  keycloak:
+    policy-enforcer:
+      enable: false
+  security:
+    users:
+      embedded:
+        enabled: false
+  tls:
+    trust-all: true
+org:
+  eclipse:
+    microprofile:
+      rest:
+        client:
+          propagateHeaders: Authorization
