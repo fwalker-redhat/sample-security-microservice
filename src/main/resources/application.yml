@@ -67,10 +67,72 @@
       early-tokens-acquisition: false
       auth-server-url: http://oidcserver/realms/name
 
+"%mtlssecurity1":
+  quarkus:
+    oidc-client:
+      enabled: false
+    keycloak:
+      policy-enforcer:
+        enable: false
+    oidc:
+      enabled: false
+      auth-server-url: http://nullhost
+    security:
+      users:
+        embedded:
+          enabled: false
+    http:
+      ssl-port: 8444
+      ssl:
+        certificate:
+          key-store-file: META-INF/resources/client.keystore
+          key-store-password: password
+          trust-store-file: META-INF/resources/server.keystore 
+          trust-store-password: password
+        client-auth: REQUIRED
+      auth:
+        permission:
+          authenticated:
+            paths: /api/v1/sample*
+            policy: authenticated
+            enabled: true
+    
+
+"%mtlssecurity2":
+  quarkus:
+    oidc-client:
+      enabled: false
+    keycloak:
+      policy-enforcer:
+        enable: false
+    oidc:
+      enabled: false
+      auth-server-url: http://nullhost
+    security:
+      users:
+        embedded:
+          enabled: false
+    http:
+      ssl-port: 8443
+      ssl:
+        certificate:
+          key-store-file: META-INF/resources/server.keystore
+          key-store-password: password
+          trust-store-file: META-INF/resources/client.keystore 
+          trust-store-password: password
+        client-auth: REQUIRED
+      auth:
+        permission:
+          authenticated:
+            paths: /api/v1/sample*
+            policy: authenticated
+            enabled: true
+    
+
 quarkus:
   rest-client:
     "com.example.remote.SampleRemoteService":
-      url: http://localhost:8080
+      url: https://localhost:8443
   log:
     console:
       json: false
