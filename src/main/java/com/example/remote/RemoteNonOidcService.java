@@ -1,36 +1,22 @@
 package com.example.remote;
 
 import com.example.model.Sample;
-import io.quarkus.oidc.client.filter.OidcClientFilter;
+import com.example.restclient.RequestAuthHeaderFactory;
+import io.quarkus.arc.DefaultBean;
+import io.quarkus.arc.profile.IfBuildProfile;
+import io.quarkus.arc.profile.UnlessBuildProfile;
 import org.eclipse.microprofile.rest.client.annotation.RegisterClientHeaders;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
-import static java.lang.String.format;
-
-/**
- * To use it via injection.
- *
- * {@code
- *     @Inject
- *     @RestClient
- *     MyRemoteService myRemoteService;
- *
- *     public void doSomething() {
- *         Set<MyRemoteService.Extension> restClientExtensions = myRemoteService.getExtensionsById("io.quarkus:quarkus-rest-client");
- *     }
- * }
- */
-@RegisterRestClient
-@RegisterClientHeaders
-@OidcClientFilter
+@RegisterRestClient(configKey = "remoteService")
+@RegisterClientHeaders(RequestAuthHeaderFactory.class)
 @Path("/api/v1/sample")
-public interface SampleRemoteService {
+@UnlessBuildProfile("oidcsecurity")
+public interface RemoteNonOidcService {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

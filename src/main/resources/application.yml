@@ -37,6 +37,9 @@
         enable: false
     oidc:
       enabled: false
+  basicauth:
+    username: admin
+    password: admin
 
 "%oidcsecurity":
   quarkus:
@@ -52,20 +55,21 @@
             policy: authenticated
             enabled: true
     oidc:
+      enabled: true
       application-type: service
       client-id: client-id
       credentials:
-        secret: client-secret
-      auth-server-url: http://oidcserver/realms/name
+        secret: g1Em7XldvPPnnmhluamE0Gve4n2ao7kr
+      auth-server-url: http://localhost:18080/realms/quarkus
     oidc-client:
       credentials:
-        secret: client-secret
+        secret: g1Em7XldvPPnnmhluamE0Gve4n2ao7kr
       client-id: client-id
       grant:
         type: client
       enabled: true
-      early-tokens-acquisition: false
-      auth-server-url: http://oidcserver/realms/name
+      early-tokens-acquisition: true
+      auth-server-url: http://localhost:18080/realms/quarkus
 
 "%mtlssecurity1":
   quarkus:
@@ -82,21 +86,22 @@
         embedded:
           enabled: false
     http:
-      ssl-port: 8444
+      handle-100-continue-automatically: true
+      ssl-port: 8443
       ssl:
-        certificate:
-          key-store-file: META-INF/resources/client.keystore
-          key-store-password: password
-          trust-store-file: META-INF/resources/server.keystore 
-          trust-store-password: password
-        client-auth: REQUIRED
-      auth:
-        permission:
-          authenticated:
-            paths: /api/v1/sample*
-            policy: authenticated
-            enabled: true
-    
+        client-auth: none
+      port: 0
+    rest-client:
+      remoteService:
+        key-store: classpath:/META-INF/resources/client.keystore
+        key-store-password: password
+        trust-store: classpath:/META-INF/resources/server.keystore
+        trust-store-password: password
+        follow-redirects: true
+        read-timeout: 10000
+        connection-ttl: 120000
+        url: https://localhost:8444
+
 
 "%mtlssecurity2":
   quarkus:
@@ -113,33 +118,45 @@
         embedded:
           enabled: false
     http:
-      ssl-port: 8443
+      handle-100-continue-automatically: true
+      port: 0
+      ssl-port: 8444
       ssl:
         certificate:
           key-store-file: META-INF/resources/server.keystore
           key-store-password: password
-          trust-store-file: META-INF/resources/client.keystore 
+          trust-store-file: META-INF/resources/client.keystore
           trust-store-password: password
-        client-auth: REQUIRED
+        client-auth: required
       auth:
         permission:
           authenticated:
             paths: /api/v1/sample*
             policy: authenticated
             enabled: true
-    
+    rest-client:
+      remoteService:
+        key-store: classpath:/META-INF/resources/client.keystore
+        key-store-password: password
+        trust-store: classpath:/META-INF/resources/server.keystore
+        trust-store-password: password
+        follow-redirects: true
+        read-timeout: 10000
+        connection-ttl: 120000
+        url: https://localhost:8443
 
 quarkus:
   rest-client:
-    "com.example.remote.SampleRemoteService":
-      url: https://localhost:8443
+    remoteService:
+      url: http://localhost:8080
   log:
     console:
       json: false
+    level: TRACE
   oidc:
-    enabled: true
+    enabled: false
   oidc-client:
-    enabled: true
+    enabled: false
   keycloak:
     policy-enforcer:
       enable: false
@@ -156,6 +173,7 @@ quarkus:
           enabled: false
   tls:
     trust-all: true
+  profile:
 org:
   eclipse:
     microprofile:
